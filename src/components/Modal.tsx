@@ -1,6 +1,8 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import ContactForm from './ContactForm';
+import { sendMessage } from '../api';
+import { toast } from 'react-toastify';
 
 interface ModalProps {
   isOpen: boolean;
@@ -22,8 +24,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         <h2 className="text-2xl font-bold text-[#AA151B] mb-6">
           Получить консультацию
         </h2>
-        <ContactForm onSubmit={() => {
-          console.log('Form submitted');
+        <ContactForm onSubmit={async (data) => {
+          try {
+            await sendMessage(data);
+            toast("Заявка отправлена! Мы свяжемся с вами в ближайшее время", { type: "success", autoClose: false, position: 'top-center', theme: 'dark' });
+          } catch (error) {
+            toast("Произошла ошибка при отправке заявки. Попробуйте позже", { type: "error", autoClose: false, position: 'top-center', theme: 'dark' });
+          };
           onClose();
         }} />
       </div>
