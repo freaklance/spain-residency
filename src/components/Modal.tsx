@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import ContactForm from './ContactForm';
 import { sendMessage } from '../api';
 import { toast } from 'react-toastify';
+import { useSearchParams } from 'react-router-dom';
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,6 +11,9 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+  const [searchParams] = useSearchParams();
+  const referral = searchParams.get('r') || undefined;
+
   if (!isOpen) return null;
 
   return (
@@ -26,6 +30,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         </h2>
         <ContactForm onSubmit={async (data) => {
           try {
+            data.referral = referral;
             await sendMessage(data);
             toast("Заявка отправлена! Мы свяжемся с вами в ближайшее время", { type: "success", autoClose: false, position: 'top-center', theme: 'dark' });
           } catch (error) {

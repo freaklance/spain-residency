@@ -7,6 +7,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import type { Testimonial, CaseStudy, Statistic, Requirement, WorkStage } from './types';
 import { toast, ToastContainer } from 'react-toastify';
 import { sendMessage } from './api';
+import { useSearchParams } from 'react-router-dom';
 
 const statistics: Statistic[] = [
   { value: "1000+", label: "Довольных клиентов" },
@@ -102,6 +103,9 @@ const cases: CaseStudy[] = [
 
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [searchParams] = useSearchParams();
+  const referral = searchParams.get('r') || undefined;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -261,6 +265,7 @@ function HomePage() {
               <h3 className="text-2xl font-semibold mb-6">Оставить заявку</h3>
               <ContactForm onSubmit={async (data) => {
                 try {
+                  data.referral = referral;
                   await sendMessage(data);
                   toast("Заявка отправлена! Мы свяжемся с вами в ближайшее время", { type: "success", autoClose: false, position: 'top-center', theme: 'dark' });
                 } catch (error) {

@@ -2,6 +2,7 @@ export interface ContactFormData {
   name: string;
   country: string;
   phone: string;
+  referral?: string;
 }
 
 export interface Testimonial {
